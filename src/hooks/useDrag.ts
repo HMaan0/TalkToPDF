@@ -57,7 +57,7 @@ export function useDrag(): UseDragReturn {
     );
 
     if (pdfFiles.length > 0) {
-      console.log("PDF files dropped:", pdfFiles);
+      "PDF files dropped:", pdfFiles;
       const formData = new FormData();
       formData.append("file", pdfFiles[0]);
       await upload(formData);

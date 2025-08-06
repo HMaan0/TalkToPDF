@@ -6,6 +6,7 @@ import os from "os";
 import path from "path";
 import { chunkText } from "../chunkText";
 import { createEmbeddings } from "../createEmbeddings";
+import { ensureCollection, uploadEmbeddings } from "../vectorDB";
 
 export async function upload(formData: FormData) {
   try {
@@ -27,11 +28,11 @@ export async function upload(formData: FormData) {
 
         pdfParser.on(
           "pdfParser_dataError",
-          (errData: { parserError: string }) => console.log(errData.parserError)
+          (errData: { parserError: string }) =>
+            console.error(errData.parserError)
         );
 
         pdfParser.on("pdfParser_dataReady", () => {
-          console.log(pdfParser.getRawTextContent());
           parsedText = pdfParser.getRawTextContent();
         });
 
@@ -42,10 +43,16 @@ export async function upload(formData: FormData) {
         });
 
         const textChunks = chunkText(parsedText);
-
         const chunks = await createEmbeddings(textChunks);
 
-        //save to db
+        await ensureCollection("pdf_chunks", 1536);
+
+        const points = chunks.map((embedding, idx) => ({
+          id: idx + 1,
+          text: textChunks[idx],
+          embedding,
+        }));
+        await uploadEmbeddings("pdf_chunks", points);
       }
     }
   } catch (error) {

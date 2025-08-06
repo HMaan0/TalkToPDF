@@ -1,7 +1,7 @@
 "use client";
 
 import Drop from "@/components/drop/Drop";
-import Input from "@/components/input/Input";
+import InputBox from "@/components/input/InputBox";
 import Playground from "@/components/playground/Playground";
 import { useDrag } from "@/hooks/useDrag";
 
@@ -16,18 +16,18 @@ export default function Home() {
 
   return (
     <main
-      className="w-full h-screen"
+      className="w-full min-h-screen h-full overflow-auto flex flex-col"
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       {isDragging && <Drop />}
-      <section className="w-full h-full bg-gray-900">
+      <section className="flex justify-center w-full h-full bg-gray-900 pt-15 pb-10">
         <Playground />
       </section>
-      <section className="absolute bottom-0 flex justify-center w-full px-4">
-        <Input />
+      <section className="sticky bottom-0 flex justify-center w-full px-4 bg-gray-900  z-40">
+        <InputBox />
       </section>
     </main>
   );

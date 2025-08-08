@@ -1,10 +1,25 @@
 "use client";
+import { useEffect } from "react";
 import { useSubmit } from "@/hooks/useSubmit";
 import { FaArrowUp } from "react-icons/fa";
 
 const Button = () => {
   const { message, submit } = useSubmit();
-  console.log("rerender button");
+
+  // Listen for Enter key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && message) {
+        e.preventDefault();
+        submit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [message, submit]);
 
   return (
     <button

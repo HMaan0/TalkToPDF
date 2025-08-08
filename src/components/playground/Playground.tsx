@@ -1,6 +1,7 @@
 "use client";
 
 import { useConversation } from "@/store/useCoversation";
+import { Markdown } from "./MarkDown";
 
 const Playground = () => {
   const messages = useConversation((state) => state.messages);
@@ -9,7 +10,7 @@ const Playground = () => {
       {messages.map((message) => (
         <div
           key={message.id}
-          className="w-[660px] flex flex-col gap-4 font-sans"
+          className="w-[660px] flex flex-col gap-4 font-sans "
         >
           {message.role === "user" ? (
             <>
@@ -38,7 +39,9 @@ const Playground = () => {
                     return (
                       <div className="pb-10" key={`${message.id}-${i}`}>
                         {part.text.length > 0 ? (
-                          part.text
+                          <>
+                            <Markdown>{part.text}</Markdown>
+                          </>
                         ) : (
                           <span className="text-gray-400 italic">
                             Thinking...

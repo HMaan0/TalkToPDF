@@ -27,7 +27,6 @@ export async function POST(req: Request) {
         .filter((part) => part.type === "text")
         .map((part) => part.text)
     );
-  console.log(prompts);
   const lastMessage = prompts[prompts.length - 1];
   const messageEmbeddings = await createEmbeddings([lastMessage]);
 
@@ -59,9 +58,12 @@ export async function POST(req: Request) {
     {
       role: "system" as const,
       content: `You are a helpful assistant that answers questions based on the provided PDF content.
-                Use only the information from the context provided. If the answer is not in the context,
-                say so clearly. Be concise and accurate.
-                
+                Use only the information from the context provided. If the answer is not in the context, say so clearly.
+                Give the full response in valid GitHub-flavored Markdown with:
+                  - Proper blank lines between paragraphs and lists
+                  - Correct list syntax 
+                  - use heading 
+
                 Context from PDF:
                 ${context}`,
     },
@@ -69,7 +71,7 @@ export async function POST(req: Request) {
   ];
 
   const result = streamText({
-    model: openai("gpt-3.5-turbo"),
+    model: openai("gpt-4o-mini"),
     messages: enhancedMessages,
   });
 

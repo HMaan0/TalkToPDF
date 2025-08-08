@@ -27,9 +27,16 @@ const components: Partial<Components> = {
       </ul>
     );
   },
+  p: ({ node, children, ...props }) => {
+    return (
+      <p className="my-0.5 leading-relaxed" {...props}>
+        {children}
+      </p>
+    );
+  },
   strong: ({ node, children, ...props }) => {
     return (
-      <span className="font-bold mt-6 mb-2 " {...props}>
+      <span className="font-semibold" {...props}>
         {children}
       </span>
     );
@@ -49,44 +56,64 @@ const components: Partial<Components> = {
   },
   h1: ({ node, children, ...props }) => {
     return (
-      <h1 className="text-3xl font-bold mt-6 mb-2" {...props}>
-        {children}
-      </h1>
+      <>
+        <div className="mt-0 mb-8  first:block hidden ">
+          <h1 className="text-[28px] font-semibold" {...props}>
+            {children}
+          </h1>
+        </div>
+        <div className="mt-8 mb-8  [&:nth-child(2)]:hidden">
+          <div className="border-b border-gray-500 my-12 "></div>
+          <h1 className="text-[28px] font-semibold" {...props}>
+            {children}
+          </h1>
+        </div>
+      </>
     );
   },
   h2: ({ node, children, ...props }) => {
     return (
-      <h2 className="text-2xl font-bold mt-6 mb-2" {...props}>
-        {children}
-      </h2>
+      <div className="mt-8 mb-8">
+        <h2 className="text-2xl font-semibold" {...props}>
+          {children}
+        </h2>
+      </div>
     );
   },
   h3: ({ node, children, ...props }) => {
     return (
-      <h3 className="text-xl font-bold mt-6 mb-2 " {...props}>
-        {children}
-      </h3>
+      <div className="mt-8 mb-8">
+        <h3 className="text-xl font-semibold" {...props}>
+          {children}
+        </h3>
+      </div>
     );
   },
   h4: ({ node, children, ...props }) => {
     return (
-      <h4 className="text-lg font-bold mt-6 mb-2" {...props}>
-        {children}
-      </h4>
+      <div className="mt-8 mb-8">
+        <h4 className="text-lg font-semibold" {...props}>
+          {children}
+        </h4>
+      </div>
     );
   },
   h5: ({ node, children, ...props }) => {
     return (
-      <h5 className="text-base font-bold mt-6 mb-2" {...props}>
-        {children}
-      </h5>
+      <div className="mt-8 mb-8">
+        <h5 className="text-base font-semibold" {...props}>
+          {children}
+        </h5>
+      </div>
     );
   },
   h6: ({ node, children, ...props }) => {
     return (
-      <h6 className="text-sm font-bold mt-6 mb-2" {...props}>
-        {children}
-      </h6>
+      <div className="mt-8 mb-2">
+        <h6 className="text-sm font-semibold" {...props}>
+          {children}
+        </h6>
+      </div>
     );
   },
 };

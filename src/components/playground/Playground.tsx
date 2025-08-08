@@ -6,11 +6,11 @@ import { Markdown } from "./MarkDown";
 const Playground = () => {
   const messages = useConversation((state) => state.messages);
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-14 items-center">
       {messages.map((message) => (
         <div
           key={message.id}
-          className="w-[660px] flex flex-col gap-4 font-sans "
+          className="w-11/12 max-w-[660px] flex flex-col font-sans"
         >
           {message.role === "user" ? (
             <>

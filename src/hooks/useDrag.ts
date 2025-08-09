@@ -1,4 +1,5 @@
 import { upload } from "@/lib/actions/upload";
+import { useFile } from "@/store/useFile";
 import { useState } from "react";
 
 interface UseDragReturn {
@@ -11,7 +12,9 @@ interface UseDragReturn {
 
 export function useDrag(): UseDragReturn {
   const [isDragging, setIsDragging] = useState<boolean>(false);
-
+  const setLoadingFileTrue = useFile((state) => state.setLoadingFileTrue);
+  const setErrorFileTrue = useFile((state) => state.setErrorFileTrue);
+  const setFile = useFile((state) => state.setFile);
   const handleDragEnter = (e: React.DragEvent<HTMLElement>): void => {
     e.preventDefault();
     e.stopPropagation();
@@ -36,7 +39,6 @@ export function useDrag(): UseDragReturn {
     e.preventDefault();
     e.stopPropagation();
 
-    // Type assertion needed because relatedTarget can be null
     const relatedTarget = e.relatedTarget as Node | null;
 
     if (relatedTarget && e.currentTarget.contains(relatedTarget)) {
@@ -57,10 +59,23 @@ export function useDrag(): UseDragReturn {
     );
 
     if (pdfFiles.length > 0) {
-      "PDF files dropped:", pdfFiles;
+      const file = pdfFiles[0];
       const formData = new FormData();
       formData.append("file", pdfFiles[0]);
-      await upload(formData);
+      try {
+        setFile(null);
+        setLoadingFileTrue(true);
+        const fileUploaded = await upload(formData);
+        if (fileUploaded) {
+          setFile(file.name);
+        } else {
+          setErrorFileTrue(true);
+        }
+      } catch (error) {
+        setFile(null);
+        setErrorFileTrue(true);
+        console.error("unable to upload", error);
+      }
     }
   };
 

@@ -6,10 +6,9 @@ import { FaArrowUp } from "react-icons/fa";
 const Button = () => {
   const { message, submit } = useSubmit();
 
-  // Listen for Enter key press
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter" && message) {
+      if (e.key === "Enter" && !e.ctrlKey && !e.shiftKey && message) {
         e.preventDefault();
         submit();
       }
@@ -23,7 +22,7 @@ const Button = () => {
 
   return (
     <button
-      className={`h-full p-3 border border-gray-500 rounded-2xl ${
+      className={`h-full  p-3 border border-gray-500 rounded-2xl ${
         message ? "hover:cursor-pointer" : "hover:cursor-not-allowed"
       }`}
       onClick={submit}

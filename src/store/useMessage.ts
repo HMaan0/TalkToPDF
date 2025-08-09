@@ -2,12 +2,12 @@ import { create } from "zustand";
 
 interface messageStore {
   message: string | null;
-  setMessage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setMessage: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   clearMessage: () => void;
 }
 export const useMessage = create<messageStore>((set) => ({
   message: null,
-  setMessage: (e: React.ChangeEvent<HTMLInputElement>) =>
+  setMessage: (e: React.ChangeEvent<HTMLTextAreaElement>) =>
     set(() => ({ message: e.target.value })),
 
   clearMessage: () => set(() => ({ message: null })),

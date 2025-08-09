@@ -1,3 +1,4 @@
+"use server";
 import axios from "axios";
 
 const QDRANT_URL = "http://localhost:6333";
@@ -43,4 +44,8 @@ export async function getEmbeddings(collection: string) {
     vector: point.vector,
     text: point.payload?.text || "",
   }));
+}
+
+export async function deleteCollection(name: string) {
+  await axios.delete(`${QDRANT_URL}/collections/${name}`);
 }

@@ -8,72 +8,97 @@ import {
   cosineSimilarity,
 } from "ai";
 
-type PdfEmbedding = {
-  id: number;
-  text: string;
-  vector: number[];
-}[];
+type PdfEmbedding =
+  | {
+      id: number;
+      text: string;
+      vector: number[];
+    }[]
+  | null;
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
-  const pdfEmbedding: PdfEmbedding = await getEmbeddings("pdf_chunks");
+  try {
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
-  const prompts = messages
-    .filter((message) => message.role === "user")
-    .flatMap((message) =>
-      message.parts
-        .filter((part) => part.type === "text")
-        .map((part) => part.text)
-    );
-  const lastMessage = prompts[prompts.length - 1];
-  const messageEmbeddings = await createEmbeddings([lastMessage]);
+    let pdfEmbedding: PdfEmbedding = null;
+    let context: string | null = null;
 
-  const similarities = pdfEmbedding.map((chunk) => ({
-    text: chunk.text,
-    similarity: cosineSimilarity(messageEmbeddings[0].embedding, chunk.vector),
-  }));
+    try {
+      pdfEmbedding = await getEmbeddings("pdf_chunks");
+    } catch (err) {
+      console.warn("No PDF embeddings found or failed to fetch:", err);
+      pdfEmbedding = null;
+    }
 
-  const relevantChunks = similarities
-    .sort(
-      (a: { similarity: number }, b: { similarity: number }) =>
-        b.similarity - a.similarity
-    )
-    .slice(0, 3);
+    const prompts = messages
+      .filter((message) => message.role === "user")
+      .flatMap((message) =>
+        message.parts
+          .filter((part) => part.type === "text")
+          .map((part) => part.text)
+      );
 
-  if (relevantChunks.length === 0) {
-    return new Response(
-      "I couldn't find relevant information in the PDF to answer your question."
-    );
+    const lastMessage = prompts[prompts.length - 1];
+
+    let messageEmbeddings: { embedding: number[] }[] = [];
+    try {
+      messageEmbeddings = await createEmbeddings([lastMessage]);
+    } catch (err) {
+      console.warn("Failed to create message embeddings:", err);
+    }
+
+    if (pdfEmbedding && messageEmbeddings.length > 0) {
+      const similarities = pdfEmbedding.map((chunk) => ({
+        text: chunk.text,
+        similarity: cosineSimilarity(
+          messageEmbeddings[0].embedding,
+          chunk.vector
+        ),
+      }));
+
+      const relevantChunks = similarities
+        .sort((a, b) => b.similarity - a.similarity)
+        .slice(0, 3);
+
+      if (relevantChunks.length > 0) {
+        context = relevantChunks.map((chunk) => chunk.text).join("\n\n");
+      }
+    }
+
+    const modelMessages = convertToModelMessages(messages);
+
+    const enhancedMessages = [
+      {
+        role: "system" as const,
+        content: `You are a helpful chat with PDF assistant that answers questions based on the provided PDF content.
+Use only the information from the PDF provided. If the answer is not in the context, say so clearly.
+Give the full response in valid GitHub-flavored Markdown with:
+- Proper blank lines between paragraphs and lists
+- Correct list syntax
+- Use headings
+
+${
+  context
+    ? `Context from PDF:\n${context}`
+    : "No PDF available. If user ask anything specific say PDF is not provided"
+}
+        `,
+      },
+      ...modelMessages,
+    ];
+
+    const result = streamText({
+      model: openai("gpt-4o-mini"),
+      messages: enhancedMessages,
+    });
+
+    return result.toUIMessageStreamResponse();
+  } catch (error) {
+    console.error("POST request failed:", error);
+    return new Response("An error occurred while processing your request.", {
+      status: 500,
+    });
   }
-
-  const context = relevantChunks
-    .map((chunk: { text: string }) => chunk.text)
-    .join("\n\n");
-
-  const modelMessages = convertToModelMessages(messages);
-
-  const enhancedMessages = [
-    {
-      role: "system" as const,
-      content: `You are a helpful assistant that answers questions based on the provided PDF content.
-                Use only the information from the context provided. If the answer is not in the context, say so clearly.
-                Give the full response in valid GitHub-flavored Markdown with:
-                  - Proper blank lines between paragraphs and lists
-                  - Correct list syntax 
-                  - use heading 
-
-                Context from PDF:
-                ${context}`,
-    },
-    ...modelMessages,
-  ];
-
-  const result = streamText({
-    model: openai("gpt-4o-mini"),
-    messages: enhancedMessages,
-  });
-
-  return result.toUIMessageStreamResponse();
 }

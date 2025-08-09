@@ -1,4 +1,5 @@
 "use server";
+// @ts-nocheck
 import { promises as fs } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import PDFParser from "pdf2json";
@@ -6,7 +7,11 @@ import os from "os";
 import path from "path";
 import { chunkText } from "../chunkText";
 import { createEmbeddings } from "../createEmbeddings";
-import { ensureCollection, uploadEmbeddings } from "../vectorDB";
+import {
+  deleteCollection,
+  ensureCollection,
+  uploadEmbeddings,
+} from "../vectorDB";
 
 export async function upload(formData: FormData) {
   try {
@@ -44,6 +49,7 @@ export async function upload(formData: FormData) {
 
         const textChunks = chunkText(parsedText);
         const chunks = await createEmbeddings(textChunks);
+        await deleteCollection("pdf_chunks");
 
         await ensureCollection("pdf_chunks", 1536);
 
@@ -53,9 +59,13 @@ export async function upload(formData: FormData) {
           embedding,
         }));
         await uploadEmbeddings("pdf_chunks", points);
+        return true;
       }
+      return false;
     }
+    return false;
   } catch (error) {
     console.error("Error uploading PDF", error);
+    return false;
   }
 }

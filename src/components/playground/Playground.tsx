@@ -2,6 +2,7 @@
 import { useConversation } from "@/store/useCoversation";
 import { Markdown } from "./MarkDown";
 import { useEffect, useRef, useState } from "react";
+import LoadingResponse from "../loading/LoadingResponse";
 
 const Playground = () => {
   const messages = useConversation((state) => state.messages);
@@ -15,7 +16,7 @@ const Playground = () => {
     if (shouldShowTyping !== isUserTyping) {
       setIsUserTyping(shouldShowTyping);
     }
-  }, [lastMessageId, lastMessage?.role]);
+  }, [lastMessageId, lastMessage?.role, isUserTyping]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -23,7 +24,7 @@ const Playground = () => {
     }, 100);
 
     return () => clearTimeout(timeoutId);
-  }, [messages.length]);
+  }, [messages.length, lastMessageId]);
 
   return (
     <div className="w-full flex flex-col gap-14 items-center">
@@ -46,6 +47,8 @@ const Playground = () => {
                         {part.text}
                       </div>
                     );
+                  default:
+                    return null;
                 }
               })}
             </>
@@ -60,18 +63,26 @@ const Playground = () => {
                         {part.text.length > 0 ? (
                           <Markdown>{part.text}</Markdown>
                         ) : (
-                          <span className="text-gray-400 italic">
-                            Thinking...
-                          </span>
+                          <>
+                            <LoadingResponse />
+                          </>
                         )}
                       </div>
                     );
+                  default:
+                    return null;
                 }
               })}
             </>
           )}
         </div>
       ))}
+
+      {isUserTyping && (
+        <div className="w-11/12 max-w-[660px] flex gap-1 font-sans">
+          <LoadingResponse />
+        </div>
+      )}
 
       <div
         ref={bottomRef}

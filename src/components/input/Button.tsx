@@ -22,8 +22,10 @@ const Button = () => {
 
   return (
     <button
-      className={`h-full  p-3 border border-gray-500 rounded-2xl ${
-        message ? "hover:cursor-pointer" : "hover:cursor-not-allowed"
+      className={`h-full bg-[#a3004c]/20  p-3 border border-[#a3004c]/50  rounded-xl ${
+        message
+          ? "hover:cursor-pointer hover:bg-[#a3004c]/50 transition-colors duration-150"
+          : "hover:cursor-not-allowed"
       }`}
       onClick={submit}
       title={message ? "Send message" : "Message requires text"}

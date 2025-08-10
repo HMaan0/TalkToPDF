@@ -41,7 +41,7 @@ const Playground = () => {
                   case "text":
                     return (
                       <div
-                        className="bg-gray-700 p-4 rounded-xl w-fit ml-auto max-w-[80%]"
+                        className="bg-[#362d3d] p-4 rounded-xl w-fit ml-auto max-w-[80%]"
                         key={`${message.id}-${i}`}
                       >
                         {part.text}

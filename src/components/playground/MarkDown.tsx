@@ -8,21 +8,27 @@ const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
   ol: ({ node, children, ...props }) => {
     return (
-      <ol className="list-decimal list-outside ml-4" {...props}>
+      <ol
+        className="list-decimal list-outside ml-4  marker:text-[#dc749e]"
+        {...props}
+      >
         {children}
       </ol>
     );
   },
   li: ({ node, children, ...props }) => {
     return (
-      <li className="py-1" {...props}>
+      <li className="py-1 marker:text-[#dc749e]" {...props}>
         {children}
       </li>
     );
   },
   ul: ({ node, children, ...props }) => {
     return (
-      <ul className="list-disc list-outside ml-10" {...props}>
+      <ul
+        className="list-disc list-outside ml-10  marker:text-[#dc749e]"
+        {...props}
+      >
         {children}
       </ul>
     );
@@ -45,7 +51,7 @@ const components: Partial<Components> = {
     return (
       // @ts-expect-error
       <Link
-        className="text-blue-500 hover:underline"
+        className="text-[#dc749e] hover:underline"
         target="_blank"
         rel="noreferrer"
         {...props}
@@ -63,7 +69,7 @@ const components: Partial<Components> = {
           </h1>
         </div>
         <div className="mt-8 mb-8  [&:nth-child(2)]:hidden">
-          <div className="border-b border-gray-500 my-12 "></div>
+          <div className="border-b border-[#dc749e] my-12 "></div>
           <h1 className="text-[28px] font-semibold" {...props}>
             {children}
           </h1>
@@ -74,7 +80,7 @@ const components: Partial<Components> = {
   h2: ({ node, children, ...props }) => {
     return (
       <div className="mt-8 mb-8">
-        <div className="border-b border-gray-500 my-12 "></div>
+        <div className="border-b border-[#dc749e] my-12 "></div>
         <h2 className="text-2xl font-semibold" {...props}>
           {children}
         </h2>
@@ -84,7 +90,7 @@ const components: Partial<Components> = {
   h3: ({ node, children, ...props }) => {
     return (
       <div className="mt-8 mb-8">
-        <div className="border-b border-gray-500 my-12 "></div>
+        <div className="border-b border-[#dc749e] my-12 "></div>
         <h3 className="text-xl font-semibold" {...props}>
           {children}
         </h3>
@@ -94,7 +100,7 @@ const components: Partial<Components> = {
   h4: ({ node, children, ...props }) => {
     return (
       <div className="mt-8 mb-8">
-        <div className="border-b border-gray-500 my-12 "></div>
+        <div className="border-b border-[#dc749e] my-12 "></div>
         <h4 className="text-lg font-semibold" {...props}>
           {children}
         </h4>
@@ -104,7 +110,7 @@ const components: Partial<Components> = {
   h5: ({ node, children, ...props }) => {
     return (
       <div className="mt-8 mb-8">
-        <div className="border-b border-gray-500 my-12 "></div>
+        <div className="border-b border-[#dc749e] my-12 "></div>
         <h5 className="text-base font-semibold" {...props}>
           {children}
         </h5>
@@ -114,7 +120,7 @@ const components: Partial<Components> = {
   h6: ({ node, children, ...props }) => {
     return (
       <div className="mt-8 mb-2">
-        <div className="border-b border-gray-500 my-12 "></div>
+        <div className="border-b border-[#dc749e] my-12 "></div>
         <h6 className="text-sm font-semibold" {...props}>
           {children}
         </h6>

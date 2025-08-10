@@ -21,14 +21,14 @@ const InputBox = () => {
     await deleteCollection("pdf_chunks");
   }
   return (
-    <div className="flex flex-col justify-between border border-gray-500 bg-gray-700 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-32 rounded-t-xl">
-      <Input />
-      <div className=" w-full flex justify-between items-center ">
-        <div>
-          {file || loadingFile ? (
-            <>
-              <div className="border border-gray-500 p-2 flex gap-2 w-full rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 ">
-                <div className="w-12 h-12 bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 rounded-xl flex justify-center items-center  shadow-md">
+    <div className="min-w-[60px] max-w-[685px] px-2.5 pt-2.5 backdrop-blur-xl border-[0.1px] border-b-0 border-[#27242c] rounded-t-3xl  flex justify-center items-center">
+      <div className="backdrop-blur-lg flex flex-col justify-between border-b-0 border border-[#27242c] bg-[#352c3c]/30 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-32 rounded-t-2xl">
+        <Input />
+        <div className=" w-full flex justify-between items-center ">
+          <div>
+            {file || loadingFile ? (
+              <>
+                <div className="relative border border-[#4a4454] items-center hover:bg-white/5 duration-100 justify-between p-2 flex gap-2 w-full rounded-xl shadow-md hover:shadow-lg transition-all hover:cursor-pointer group">
                   {file ? (
                     <DocumentTextIcon className="w-7 h-7" />
                   ) : (
@@ -40,29 +40,27 @@ const InputBox = () => {
                       )}
                     </>
                   )}
-                </div>
-                {file && (
-                  <>
-                    <div className="flex flex-col justify-between">
+
+                  {file && (
+                    <>
                       <p className="font-semibold truncate max-w-xs">{file}</p>
-                      <p className="text-sm font-semibold">PDF</p>
-                    </div>
-                    <div>
-                      <button
-                        className="hover:cursor-pointer"
-                        onClick={removeFile}
-                      >
-                        <IoCloseCircle size={20} />
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
-          ) : null}
-        </div>
-        <div className="h-min">
-          <Button />
+                      <div>
+                        <button
+                          className="hover:cursor-pointer absolute top-[-8px] right-[-7px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                          onClick={removeFile}
+                        >
+                          <IoCloseCircle size={23} />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
+            ) : null}
+          </div>
+          <div className="h-min">
+            <Button />
+          </div>
         </div>
       </div>
     </div>

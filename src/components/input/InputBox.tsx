@@ -20,9 +20,8 @@ const InputBox = () => {
     setErrorFileTrue(false);
     await deleteCollection("pdf_chunks");
   }
-  console.log(errorFile);
   return (
-    <div className="flex flex-col justify-between border border-gray-500 bg-gray-700 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-28 rounded-t-xl">
+    <div className="flex flex-col justify-between border border-gray-500 bg-gray-700 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-32 rounded-t-xl">
       <Input />
       <div className=" w-full flex justify-between items-center ">
         <div>

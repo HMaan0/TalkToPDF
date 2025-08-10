@@ -1,14 +1,16 @@
 "use server";
-import axios from "axios";
+import { QdrantClient } from "@qdrant/js-client-rest";
+const QDRANT_URL = process.env.QDRANT_URL;
+const QDRANT_API_KEY = process.env.QDRANT_API_KEY;
 
-const QDRANT_URL = "http://localhost:6333";
+const client = new QdrantClient({
+  url: QDRANT_URL,
+  apiKey: QDRANT_API_KEY,
+});
 
 export async function ensureCollection(name: string, vectorSize: number) {
-  await axios.put(`${QDRANT_URL}/collections/${name}`, {
-    vectors: {
-      size: vectorSize,
-      distance: "Cosine",
-    },
+  await client.createCollection(name, {
+    vectors: { size: vectorSize, distance: "Cosine" },
   });
 }
 
@@ -26,20 +28,17 @@ export async function uploadEmbeddings(
     payload: { text: chunk.text },
   }));
 
-  await axios.put(`${QDRANT_URL}/collections/${collection}/points`, {
-    points,
+  await client.upsert(collection, {
+    points: points,
   });
 }
 
 export async function getEmbeddings(collection: string) {
-  const response = await axios.post(
-    `${QDRANT_URL}/collections/${collection}/points/scroll`,
-    {
-      with_vector: true,
-      with_payload: true,
-    }
-  );
-  return response.data.result.points.map((point: any) => ({
+  const response = await client.scroll(collection, {
+    with_payload: true,
+    with_vector: true,
+  });
+  return response.points.map((point: any) => ({
     id: point.id,
     vector: point.vector,
     text: point.payload?.text || "",
@@ -47,5 +46,5 @@ export async function getEmbeddings(collection: string) {
 }
 
 export async function deleteCollection(name: string) {
-  await axios.delete(`${QDRANT_URL}/collections/${name}`);
+  await client.deleteCollection(name);
 }

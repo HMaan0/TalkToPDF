@@ -64,7 +64,7 @@ export function useDrag(): UseDragReturn {
         setLoadingFileTrue(true);
         setFile(null);
 
-        if (file.size > 588620) {
+        if (file.size > 1500000) {
           setErrorFileTrue(true, "File is too big");
           setFile;
           return;

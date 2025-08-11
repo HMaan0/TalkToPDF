@@ -29,7 +29,7 @@ const Input = () => {
   return (
     <textarea
       ref={textareaRef}
-      placeholder="Ask anything"
+      placeholder="Ask anything..."
       className="font-sans w-full focus:outline-none placeholder:font-[600] resize-none overflow-y-auto min-h-[24px] max-h-[250px] leading-6
   [&::-webkit-scrollbar]:w-1.5
   [&::-webkit-scrollbar-track]:rounded-full

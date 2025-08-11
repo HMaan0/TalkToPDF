@@ -2,8 +2,10 @@
 
 import Drop from "@/components/drop/Drop";
 import InputBox from "@/components/input/InputBox";
+import LandingText from "@/components/LandingText";
 import Playground from "@/components/playground/Playground";
 import { useDrag } from "@/hooks/useDrag";
+import { useConversation } from "@/store/useCoversation";
 
 export default function Home() {
   const {
@@ -13,7 +15,7 @@ export default function Home() {
     handleDragOver,
     handleDrop,
   } = useDrag();
-
+  const messages = useConversation((state) => state.messages);
   return (
     <main
       className="relative  w-full min-h-screen h-full overflow-auto flex flex-col"
@@ -24,7 +26,7 @@ export default function Home() {
     >
       {isDragging && <Drop />}
       <section className="flex items-center w-full h-full  pt-15  mb-28  flex-col">
-        <Playground />
+        {messages.length > 0 ? <Playground /> : <LandingText />}
       </section>
       <section className="fixed bottom-0 flex justify-center w-full px-4   z-40">
         <InputBox />

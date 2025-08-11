@@ -49,7 +49,10 @@ const InputBox = () => {
                           className="hover:cursor-pointer absolute top-[-8px] right-[-7px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                           onClick={removeFile}
                         >
-                          <IoCloseCircle size={23} />
+                          <IoCloseCircle
+                            size={23}
+                            className=" hover:opacity-70 duration-100 transition-all"
+                          />
                         </button>
                       </div>
                     </>

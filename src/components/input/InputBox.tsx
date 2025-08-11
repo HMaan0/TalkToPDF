@@ -11,6 +11,7 @@ const InputBox = () => {
   const file = useFile((state) => state.file);
   const loadingFile = useFile((state) => state.loadingFile);
   const errorFile = useFile((state) => state.errorFile);
+  const errorMessage = useFile((state) => state.errorMessage);
   const setFile = useFile((state) => state.setFile);
   const setLoadingFileTrue = useFile((state) => state.setLoadingFileTrue);
   const setErrorFileTrue = useFile((state) => state.setErrorFileTrue);
@@ -34,7 +35,14 @@ const InputBox = () => {
                   ) : (
                     <>
                       {errorFile ? (
-                        <BiError size={30} />
+                        <>
+                          <BiError size={30} />
+                          {errorMessage && (
+                            <p className="font-semibold max-w-xs">
+                              {errorMessage}
+                            </p>
+                          )}
+                        </>
                       ) : (
                         loadingFile && <LoadingSpinner />
                       )}

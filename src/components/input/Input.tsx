@@ -37,7 +37,7 @@ const Input = () => {
   [&::-webkit-scrollbar-thumb]:rounded-full
   [&::-webkit-scrollbar-thumb]:bg-gray-300
   dark:[&::-webkit-scrollbar-track]:bg-transparent
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+  dark:[&::-webkit-scrollbar-thumb]:bg-[#3b3237]"
       value={message || ""}
       onChange={handleChange}
       rows={2}

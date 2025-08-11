@@ -1,7 +1,6 @@
 import { upload } from "@/lib/actions/upload";
 import { useFile } from "@/store/useFile";
 import { useState } from "react";
-
 interface UseDragReturn {
   isDragging: boolean;
   handleDragEnter: (e: React.DragEvent<HTMLElement>) => void;
@@ -52,7 +51,7 @@ export function useDrag(): UseDragReturn {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-
+    setErrorFileTrue(false);
     const files: File[] = Array.from(e.dataTransfer.files);
     const pdfFiles: File[] = files.filter(
       (file: File) => file.type === "application/pdf"
@@ -60,11 +59,19 @@ export function useDrag(): UseDragReturn {
 
     if (pdfFiles.length > 0) {
       const file = pdfFiles[0];
-      const formData = new FormData();
-      formData.append("file", pdfFiles[0]);
       try {
         setFile(null);
         setLoadingFileTrue(true);
+        setFile(null);
+
+        if (file.size > 588620) {
+          setErrorFileTrue(true, "File is too big");
+          setFile;
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
         const fileUploaded = await upload(formData);
         if (fileUploaded) {
           setFile(file.name);
@@ -74,7 +81,7 @@ export function useDrag(): UseDragReturn {
       } catch (error) {
         setFile(null);
         setErrorFileTrue(true);
-        console.error("unable to upload", error);
+        console.error("Unable to upload", error);
       }
     }
   };

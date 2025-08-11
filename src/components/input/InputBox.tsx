@@ -7,6 +7,8 @@ import { IoCloseCircle } from "react-icons/io5";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import { BiError } from "react-icons/bi";
 import { deleteCollection } from "@/lib/vectorDB";
+import { FaPlus } from "react-icons/fa6";
+import { upload } from "@/lib/actions/upload";
 const InputBox = () => {
   const file = useFile((state) => state.file);
   const loadingFile = useFile((state) => state.loadingFile);
@@ -21,15 +23,63 @@ const InputBox = () => {
     setErrorFileTrue(false);
     await deleteCollection("pdf_chunks");
   }
+  function removeErrorOrLoading() {
+    setFile(null);
+    setLoadingFileTrue(false);
+    setErrorFileTrue(false);
+  }
+  function openFolders() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".pdf,application/pdf";
+    input.multiple = false;
+
+    input.onchange = async (event) => {
+      const target = event.target as HTMLInputElement;
+      const files = target.files;
+      console.log("Selected PDF files:", files);
+
+      if (files && files.length > 0) {
+        const file = files[0];
+        try {
+          setFile(null);
+          setLoadingFileTrue(true);
+          setFile(null);
+
+          if (file.size > 588620) {
+            setErrorFileTrue(true, "File is too big");
+            setFile;
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", file);
+          const fileUploaded = await upload(formData);
+
+          if (fileUploaded) {
+            setFile(file.name);
+          } else {
+            setErrorFileTrue(true);
+          }
+        } catch (error) {
+          setFile(null);
+          setErrorFileTrue(true);
+          console.error("Unable to upload", error);
+        }
+      }
+    };
+
+    input.click();
+  }
   return (
     <div className="min-w-[60px] max-w-[685px] px-2.5 pt-2.5 backdrop-blur-xl border-[0.1px] border-b-0 border-[#27242c] rounded-t-3xl  flex justify-center items-center">
       <div className="backdrop-blur-lg flex flex-col justify-between border-b-0 border border-[#27242c] bg-[#352c3c]/30 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-32 rounded-t-2xl">
         <Input />
         <div className=" w-full flex justify-between items-center ">
           <div>
-            {file || loadingFile ? (
-              <>
-                <div className="relative border border-[#4a4454] items-center hover:bg-white/5 duration-100 justify-between p-2 flex gap-2 w-full rounded-xl shadow-md hover:shadow-lg transition-all hover:cursor-pointer group">
+            <div className="relative border border-[#4a4454] items-center hover:bg-white/5 duration-100 justify-between p-2 flex gap-2 w-full rounded-xl shadow-md hover:shadow-lg transition-all hover:cursor-pointer group">
+              {file || loadingFile ? (
+                <>
                   {file ? (
                     <DocumentTextIcon className="w-7 h-7" />
                   ) : (
@@ -42,6 +92,15 @@ const InputBox = () => {
                               {errorMessage}
                             </p>
                           )}
+                          <button
+                            className="hover:cursor-pointer absolute top-[-8px] right-[-7px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            onClick={removeErrorOrLoading}
+                          >
+                            <IoCloseCircle
+                              size={23}
+                              className=" hover:opacity-70 duration-100 transition-all"
+                            />
+                          </button>
                         </>
                       ) : (
                         loadingFile && <LoadingSpinner />
@@ -65,9 +124,22 @@ const InputBox = () => {
                       </div>
                     </>
                   )}
-                </div>
-              </>
-            ) : null}
+                </>
+              ) : null}
+              {!file && !loadingFile && !errorFile && (
+                <>
+                  <button
+                    className="flex justify-center items-center gap-2"
+                    onClick={openFolders}
+                  >
+                    <FaPlus size={27} className="hover:cursor-pointer" />
+                    <p className="font-sans font-semibold max-w-xs hover:cursor-pointer">
+                      Add a PDF
+                    </p>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
           <div className="h-min">
             <Button />

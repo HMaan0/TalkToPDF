@@ -132,9 +132,10 @@ const components: Partial<Components> = {
 const remarkPlugins = [remarkGfm];
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
+  const escapedChildren = children.replace(/^---$/gm, "");
   return (
     <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
-      {children}
+      {escapedChildren}
     </ReactMarkdown>
   );
 };

@@ -80,11 +80,14 @@ export async function POST(req: Request) {
 
                   This application is open source link is: https://github.com/hmaan0/TalkToPDF
 
+                  DO's
                   Give the full response in valid GitHub-flavored Markdown with:
                   - Proper blank lines between paragraphs and lists
                   - Correct list syntax
                   - Use headings
 
+                  DON'Ts
+                  - Do not use --- for your response
 ${
   context
     ? `Context from PDF:\n${context}`

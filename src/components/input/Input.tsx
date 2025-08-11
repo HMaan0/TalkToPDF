@@ -33,11 +33,9 @@ const Input = () => {
       className="font-sans w-full focus:outline-none placeholder:font-[600] resize-none overflow-y-auto min-h-[24px] max-h-[250px] leading-6
   [&::-webkit-scrollbar]:w-1.5
   [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-transparent
-  dark:[&::-webkit-scrollbar-thumb]:bg-[#3b3237]"
+  [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:bg-[#3b3237]"
       value={message || ""}
       onChange={handleChange}
       rows={2}

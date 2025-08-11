@@ -72,8 +72,8 @@ const InputBox = () => {
     input.click();
   }
   return (
-    <div className="min-w-[60px] max-w-[685px] px-2.5 pt-2.5 backdrop-blur-xl border-[0.1px] border-b-0 border-[#27242c] rounded-t-3xl  flex justify-center items-center">
-      <div className="backdrop-blur-lg flex flex-col justify-between border-b-0 border border-[#27242c] bg-[#352c3c]/30 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-32 rounded-t-2xl">
+    <div className="min-w-[60px] max-w-[685px] px-2.5 pt-2.5 backdrop-blur-xl border-[0.1px] border-b-0 bg-[#352c3c]/15 border-[#37323e24] rounded-t-3xl  flex justify-center items-center">
+      <div className="backdrop-blur-lg flex flex-col justify-between border-b-0 border border-[#37323e4b] bg-[#352c3c]/20 pt-4 pb-2 px-4 w-[675px] max-h-full min-h-32 rounded-t-2xl">
         <Input />
         <div className=" w-full flex justify-between items-center ">
           <div>
